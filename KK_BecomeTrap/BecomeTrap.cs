@@ -46,6 +46,7 @@ namespace KK_BecomeTrap
 
             if (ctrl != null && ctrl.IsTrap)
             {
+                // If the player is a trap, load alternative animations
                 try
                 {
                     __instance.motion.bundle = "action/animator/TrapAnimations.unity3d";
@@ -73,6 +74,7 @@ namespace KK_BecomeTrap
         [HarmonyPatch(typeof(ActionMap), nameof(ActionMap.Change), new[] { typeof(int), typeof(Scene.Data.FadeType) })]
         public static void MapChangePostfix(ActionMap __instance)
         {
+            // Mark all maps as safe to be in (so we don't get kicked out) if the character is a trap
             __instance.StartCoroutine(MapChangeCo(__instance));
         }
 
