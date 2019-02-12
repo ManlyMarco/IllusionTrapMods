@@ -9,7 +9,7 @@ using ActionGame.Communication;
 using BepInEx;
 using BepInEx.Logging;
 using Harmony;
-using MakerAPI.Chara;
+using KKAPI.Chara;
 using Manager;
 using Sideloader;
 
@@ -20,7 +20,7 @@ namespace KK_BecomeTrap
     public class BecomeTrap : BaseUnityPlugin
     {
         public const string GUID = "marco.becometrap";
-        internal const string Version = "1.0";
+        internal const string Version = "1.1";
 
         private static BecomeTrapController GetController(Player player)
         {

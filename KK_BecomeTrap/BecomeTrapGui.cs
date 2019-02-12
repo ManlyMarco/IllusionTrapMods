@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using BepInEx;
-using MakerAPI;
+using KKAPI.Maker;
+using KKAPI.Maker.UI;
 using UniRx;
 
 namespace KK_BecomeTrap
@@ -14,8 +15,8 @@ namespace KK_BecomeTrap
 
         private void Start()
         {
-            MakerAPI.MakerAPI.Instance.RegisterCustomSubCategories += RegisterCustomSubCategories;
-            MakerAPI.MakerAPI.Instance.ChaFileLoaded += (sender, args) => StartCoroutine(ChaFileLoadedCo());
+            MakerAPI.RegisterCustomSubCategories += RegisterCustomSubCategories;
+            MakerAPI.ChaFileLoaded += (sender, args) => StartCoroutine(ChaFileLoadedCo());
         }
 
         private IEnumerator ChaFileLoadedCo()
@@ -31,12 +32,12 @@ namespace KK_BecomeTrap
 
         private static BecomeTrapController GetMakerController()
         {
-            return MakerAPI.MakerAPI.Instance.GetCharacterControl().gameObject.GetComponent<BecomeTrapController>();
+            return MakerAPI.GetCharacterControl().gameObject.GetComponent<BecomeTrapController>();
         }
 
         private void RegisterCustomSubCategories(object sender, RegisterSubCategoriesEvent e)
         {
-            if (MakerAPI.MakerAPI.Instance.GetMakerSex() == 0)
+            if (MakerAPI.GetMakerSex() == 0)
             {
                 _toggleEnabled = e.AddControl(new MakerToggle(MakerConstants.Parameter.Character, "Character is a trap", this));
                 _toggleEnabled.ValueChanged.Subscribe(val => GetMakerController().IsTrap = val);

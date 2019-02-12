@@ -1,6 +1,6 @@
 ﻿using ExtensibleSaveFormat;
-using MakerAPI;
-using MakerAPI.Chara;
+using KKAPI;
+using KKAPI.Chara;
 
 namespace KK_BecomeTrap
 {

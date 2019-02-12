@@ -51,9 +51,9 @@
       <HintPath>..\..\MakerAPI\lib\ExtensibleSaveFormat.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MakerAPI">
-      <HintPath>..\..\..\..\Games\Koikatsu\BepInEx\MakerAPI.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="KKAPI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Games\Koikatsu\BepInEx\KKAPI.dll</HintPath>
     </Reference>
     <Reference Include="Sideloader">
       <HintPath>..\..\..\..\Games\Koikatsu\BepInEx\Sideloader.dll</HintPath>
