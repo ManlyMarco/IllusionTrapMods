@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BecomeTrap.cs" />
+    <Compile Include="BecomeTrap.Hooks.cs" />
     <Compile Include="BecomeTrapController.cs" />
     <Compile Include="BecomeTrapGui.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
