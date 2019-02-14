@@ -7,7 +7,7 @@ Mod that adds a new setting to male character maker - "Character is a trap". Tra
 The animation modifications are based on the upillusion0100-otokonoko mod.
 
 ### How to use
-1. Make sure at least BepInEx 4.1 and BepisPlugins r7 are installed, and your game is updated.
+1. Make sure at least [BepInEx v4.1](https://github.com/BepInEx/BepInEx), [BepisPlugins r7](https://github.com/bbepis/BepisPlugins) and [KKAPI v1.0](https://github.com/ManlyMarco/KKAPI) are installed, and your game is updated.
 2. Download the latest release below.
 3. Extract the archive directly into your game's directory (it has 2 folders, mods and BepInEx).
 4. Start male character maker (can directly edit from class roster). You should see a new option right under the character name and blood type fields.
