@@ -6,7 +6,6 @@ using UniRx;
 
 namespace KK_BecomeTrap
 {
-    [BepInProcess("Koikatu")]
     [BepInPlugin(BecomeTrap.GUID + "_GUI", "Koikatsu: Become Trap GUI", BecomeTrap.Version)]
     [BepInDependency(BecomeTrap.GUID)]
     public class BecomeTrapGui : BaseUnityPlugin

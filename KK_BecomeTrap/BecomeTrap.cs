@@ -13,7 +13,7 @@ namespace KK_BecomeTrap
     public partial class BecomeTrap : BaseUnityPlugin
     {
         public const string GUID = "marco.becometrap";
-        internal const string Version = "1.1";
+        internal const string Version = "1.1.1";
 
         private void Start()
         {
