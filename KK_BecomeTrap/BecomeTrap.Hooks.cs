@@ -5,10 +5,11 @@ using System.Diagnostics;
 using ActionGame;
 using ActionGame.Chara;
 using ActionGame.Communication;
-using BepInEx;
 using BepInEx.Logging;
 using Harmony;
 using Manager;
+using UnityEngine;
+using Logger = BepInEx.Logger;
 
 namespace KK_BecomeTrap
 {
@@ -52,19 +53,18 @@ namespace KK_BecomeTrap
             [HarmonyPatch(typeof(ActionMap), nameof(ActionMap.Change), new[] { typeof(int), typeof(Scene.Data.FadeType) })]
             public static void MapChangePostfix(ActionMap __instance)
             {
+                var inMainGame = Singleton<Game>.IsInstance() && Singleton<Game>.Instance.actScene != null;
+                if (!inMainGame) return;
+
                 // Mark all maps as safe to be in (so we don't get kicked out) if the character is a trap
                 __instance.StartCoroutine(MapChangeCo(__instance));
             }
 
             private static IEnumerator MapChangeCo(ActionMap instance)
             {
-                BecomeTrapController ctrl;
-                do
-                {
-                    yield return null;
-                    ctrl = GetController(FindObjectOfType<Player>());
-                }
-                while (ctrl == null);
+                BecomeTrapController ctrl = null;
+
+                yield return new WaitUntil(() => (ctrl = GetController(Singleton<Game>.Instance.actScene.Player)) != null);
 
                 if (ctrl.IsTrap)
                 {
@@ -73,6 +73,9 @@ namespace KK_BecomeTrap
                 }
             }
 
+            /// <summary>
+            /// Remove events that cause the girl to refuse to talk because you're tresspassing
+            /// </summary>
             [HarmonyPostfix]
             [HarmonyPatch(typeof(Info), "GetListCommand", new[] { typeof(int), typeof(Info.Group), typeof(int) })]
             public static void GetListCommandPostfix(Info __instance, ref List<Info.BasicInfo> __result, int _stage, Info.Group _group, int _command)
