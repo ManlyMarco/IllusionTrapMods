@@ -17,13 +17,17 @@ namespace KK_BecomeTrap
 
         private void Start()
         {
-            HarmonyInstance.Create(GUID).PatchAll(typeof(BecomeTrap.Hooks));
-
-            CharacterApi.RegisterExtraBehaviour<BecomeTrapController>(GUID);
-
             var manifests = AccessTools.Field(typeof(Sideloader.Sideloader), "LoadedManifests").GetValue(GetComponent<Sideloader.Sideloader>()) as List<Manifest>;
             if (manifests == null || manifests.All(x => x.GUID != GUID))
+            {
                 ShowZipmodError();
+            }
+            else
+            {
+                HarmonyInstance.Create(GUID).PatchAll(typeof(BecomeTrap.Hooks));
+
+                CharacterApi.RegisterExtraBehaviour<BecomeTrapController>(GUID);
+            }
         }
 
         private static void ShowZipmodError()
