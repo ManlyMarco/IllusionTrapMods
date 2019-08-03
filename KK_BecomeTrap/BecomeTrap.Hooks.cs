@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using ActionGame;
 using ActionGame.Chara;
 using ActionGame.Communication;
@@ -10,6 +10,7 @@ using Harmony;
 using Manager;
 using UnityEngine;
 using Logger = BepInEx.Logger;
+using Motion = Illusion.Game.Elements.EasyLoader.Motion;
 
 namespace KK_BecomeTrap
 {
@@ -22,31 +23,68 @@ namespace KK_BecomeTrap
                 return player?.chaCtrl?.gameObject.GetComponent<BecomeTrapController>();
             }
 
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Player), nameof(Player.LoadAnimator))]
-            public static bool LoadAnimatorPrefix(Player __instance)
+            /// <summary>
+            /// If the player is a trap, load alternative animations
+            /// </summary>
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(Motion), nameof(Motion.LoadAnimator), new[] { typeof(Animator) })]
+            public static void LoadAnimatorHook(Motion __instance, Animator animator)
             {
-                var ctrl = GetController(__instance);
-
-                if (ctrl != null && ctrl.IsTrap)
+                if (__instance.bundle == "action/animator/00.unity3d" && __instance.asset == "player")
                 {
-                    // If the player is a trap, load alternative animations
-                    try
-                    {
-                        __instance.motion.bundle = "action/animator/TrapAnimations.unity3d";
-                        __instance.motion.asset = "player";
-                        __instance.motion.LoadAnimator(__instance.animator);
+                    Logger.Log(LogLevel.Debug, "[BecomeTrap] Replacing player animations");
 
-                        return false;
-                    }
-                    catch (Exception ex)
+                    var playerClips = animator.runtimeAnimatorController.animationClips;
+
+                    // Names of animations to replace stock male animations with, same index as in stock animationClips
+                    var replacements = new[]
                     {
-                        ShowZipmodError();
-                        Logger.Log(LogLevel.Error, ex);
+                        "mc_m_talk_00_00",
+                        "f_tachi_00_08_01",
+                        "f_tachi_00_13",
+                        "f_cheer_00_02",
+                        "m_tachi_00_02",
+                        "m_suwari_00_03",
+                        "m_Lewd_00_00",
+                        "m_Lewd_00_01",
+                        "f_suwari_00_11_00_S",
+                        "f_cheer_00_01",
+                        "m_call_00",
+                        // todo Add option to change standing animation
+                        "Stand_17_01",
+                        "f_aruki_00_00_01",
+                        "f_hasiru_00_01_01",
+                        "f_syagami_00_02",
+                        "mc_m_squat_walk_00_00_01",
+                    };
+
+                    if (playerClips.Length != replacements.Length)
+                    {
+                        Logger.Log(LogLevel.Error, "Player runtimeAnimatorController.animationClips has different size than the replacement list!");
+                        return;
                     }
+
+                    var allAssets = __instance.GetAllAssets<Object>();
+                    var stockClips = allAssets.OfType<RuntimeAnimatorController>().SelectMany(x => x.animationClips);
+                    var overrideClips = allAssets.OfType<AnimatorOverrideController>().SelectMany(
+                            controller =>
+                            {
+                                var list = new List<KeyValuePair<AnimationClip, AnimationClip>>(controller.overridesCount);
+                                controller.GetOverrides(list);
+                                return list.Select(x => x.Value);
+                            });
+                    var allClipList = stockClips.Concat(overrideClips).ToList();
+
+                    // Have to make a new override controller because directly changing animationClips array doesn't work
+                    var overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+
+                    for (var i = 0; i < playerClips.Length; i++)
+                        overrideController[playerClips[i]] = allClipList.First(x => x.name == replacements[i]);
+
+                    animator.runtimeAnimatorController = overrideController;
+
+                    __instance.UnloadBundle();
                 }
-
-                return true;
             }
 
             [HarmonyPostfix]

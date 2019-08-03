@@ -1,38 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BepInEx;
-using BepInEx.Logging;
+﻿using BepInEx;
 using Harmony;
 using KKAPI.Chara;
-using Sideloader;
+using KKAPI.Studio;
 
 namespace KK_BecomeTrap
 {
     [BepInPlugin(GUID, "Koikatsu: Become Trap", Version)]
-    [BepInDependency(Sideloader.Sideloader.GUID)]
+    [BepInDependency(KKAPI.KoikatuAPI.GUID)]
     public partial class BecomeTrap : BaseUnityPlugin
     {
         public const string GUID = "marco.becometrap";
         internal const string Version = "1.1.1";
 
-        private void Start()
+        private void Awake()
         {
-            var manifests = AccessTools.Field(typeof(Sideloader.Sideloader), "LoadedManifests").GetValue(GetComponent<Sideloader.Sideloader>()) as List<Manifest>;
-            if (manifests == null || manifests.All(x => x.GUID != GUID))
-            {
-                ShowZipmodError();
-            }
-            else
-            {
-                HarmonyInstance.Create(GUID).PatchAll(typeof(BecomeTrap.Hooks));
+            if(StudioAPI.InsideStudio) return;
 
-                CharacterApi.RegisterExtraBehaviour<BecomeTrapController>(GUID);
-            }
-        }
+            CharacterApi.RegisterExtraBehaviour<BecomeTrapController>(GUID);
 
-        private static void ShowZipmodError()
-        {
-            Logger.Log(LogLevel.Error | LogLevel.Message, "[BecomeTrap] Failed to load the animations! Make sure you have KK_BecomeTrap.zipmod in your mods folder!");
+            HarmonyInstance.Create(GUID).PatchAll(typeof(Hooks));
         }
     }
 }
