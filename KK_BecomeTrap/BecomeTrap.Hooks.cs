@@ -46,6 +46,7 @@ namespace KK_BecomeTrap
                 var playerClips = animator.runtimeAnimatorController.animationClips;
 
                 // Names of animations to replace stock male animations with, same index as in stock animationClips
+                // Some male animations need to stay if they use props because they are animated separately and wouldn't match other anims
                 var replacements = new[]
                 {
                     "mc_m_talk_00_00",
@@ -72,6 +73,7 @@ namespace KK_BecomeTrap
                     return;
                 }
 
+                // Gather all available AnimationClips. They can't be accessed directly so need to spawn controllers and grab clips from those
                 var allAssets = __instance.GetAllAssets<Object>();
                 var stockClips = allAssets.OfType<RuntimeAnimatorController>().SelectMany(x => x.animationClips);
                 var overrideClips = allAssets.OfType<AnimatorOverrideController>().SelectMany(
@@ -94,7 +96,7 @@ namespace KK_BecomeTrap
                     }
                     catch (InvalidOperationException)
                     {
-                        Logger.Log(LogLevel.Error, $"Failed to find animation {replacements[i]}! Using DefaultIdleAnimation instead.");
+                        Logger.Log(LogLevel.Error, $"Failed to find animation clip {replacements[i]}! Using DefaultIdleAnimation instead.");
                         overrideController[playerClips[i]] = allClipList.First(x => x.name == BecomeTrapGui.DefaultIdleAnimation);
                     }
                 }

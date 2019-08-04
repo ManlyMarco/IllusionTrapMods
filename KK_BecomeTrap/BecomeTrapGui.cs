@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
@@ -23,10 +24,10 @@ namespace KK_BecomeTrap
             new KeyValuePair<string, string>("Stand_13_01", "Ladylike")
         };
 
-        internal static string DefaultIdleAnimation => _idleAnimations[0].Key;
-
         private MakerDropdown _animType;
         private MakerToggle _toggleEnabled;
+
+        internal static string DefaultIdleAnimation => _idleAnimations[0].Key;
 
         private IEnumerator ChaFileLoadedCo()
         {
@@ -43,6 +44,12 @@ namespace KK_BecomeTrap
         private static BecomeTrapController GetMakerController()
         {
             return MakerAPI.GetCharacterControl().gameObject.GetComponent<BecomeTrapController>();
+        }
+
+        private void MakerExiting(object sender, EventArgs e)
+        {
+            _toggleEnabled = null;
+            _animType = null;
         }
 
         private void RegisterCustomSubCategories(object sender, RegisterSubCategoriesEvent e)
@@ -63,6 +70,7 @@ namespace KK_BecomeTrap
         {
             MakerAPI.RegisterCustomSubCategories += RegisterCustomSubCategories;
             MakerAPI.ChaFileLoaded += (sender, args) => StartCoroutine(ChaFileLoadedCo());
+            MakerAPI.MakerExiting += MakerExiting;
         }
     }
 }
