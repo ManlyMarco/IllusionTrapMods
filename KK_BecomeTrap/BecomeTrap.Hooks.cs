@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +12,7 @@ using Manager;
 using UnityEngine;
 using Logger = BepInEx.Logger;
 using Motion = Illusion.Game.Elements.EasyLoader.Motion;
+using Object = UnityEngine.Object;
 
 namespace KK_BecomeTrap
 {
@@ -30,61 +32,76 @@ namespace KK_BecomeTrap
             [HarmonyPatch(typeof(Motion), nameof(Motion.LoadAnimator), new[] { typeof(Animator) })]
             public static void LoadAnimatorHook(Motion __instance, Animator animator)
             {
-                if (__instance.bundle == "action/animator/00.unity3d" && __instance.asset == "player")
+                if (__instance.bundle != "action/animator/00.unity3d" || __instance.asset != "player") return;
+
+                var inMainGame = Singleton<Game>.IsInstance() && Singleton<Game>.Instance.actScene != null;
+                if (!inMainGame) return;
+
+                var ctrl = GetController(Singleton<Game>.Instance.actScene.Player);
+
+                if (ctrl == null || !ctrl.IsTrap) return;
+
+                Logger.Log(LogLevel.Debug, "[BecomeTrap] Replacing player animations");
+
+                var playerClips = animator.runtimeAnimatorController.animationClips;
+
+                // Names of animations to replace stock male animations with, same index as in stock animationClips
+                var replacements = new[]
                 {
-                    Logger.Log(LogLevel.Debug, "[BecomeTrap] Replacing player animations");
+                    "mc_m_talk_00_00",
+                    "f_tachi_00_08_01",
+                    "f_tachi_00_13",
+                    "f_cheer_00_02",
+                    "m_tachi_00_02",
+                    "m_suwari_00_03",
+                    "m_Lewd_00_00",
+                    "m_Lewd_00_01",
+                    "f_suwari_00_11_00_S",
+                    "f_cheer_00_01",
+                    "m_call_00",
+                    string.IsNullOrEmpty(ctrl.IdleAnimation) ? BecomeTrapGui.DefaultIdleAnimation : ctrl.IdleAnimation,
+                    "f_aruki_00_00_01",
+                    "f_hasiru_00_01_01",
+                    "f_syagami_00_02",
+                    "mc_m_squat_walk_00_00_01",
+                };
 
-                    var playerClips = animator.runtimeAnimatorController.animationClips;
-
-                    // Names of animations to replace stock male animations with, same index as in stock animationClips
-                    var replacements = new[]
-                    {
-                        "mc_m_talk_00_00",
-                        "f_tachi_00_08_01",
-                        "f_tachi_00_13",
-                        "f_cheer_00_02",
-                        "m_tachi_00_02",
-                        "m_suwari_00_03",
-                        "m_Lewd_00_00",
-                        "m_Lewd_00_01",
-                        "f_suwari_00_11_00_S",
-                        "f_cheer_00_01",
-                        "m_call_00",
-                        // todo Add option to change standing animation
-                        "Stand_17_01",
-                        "f_aruki_00_00_01",
-                        "f_hasiru_00_01_01",
-                        "f_syagami_00_02",
-                        "mc_m_squat_walk_00_00_01",
-                    };
-
-                    if (playerClips.Length != replacements.Length)
-                    {
-                        Logger.Log(LogLevel.Error, "Player runtimeAnimatorController.animationClips has different size than the replacement list!");
-                        return;
-                    }
-
-                    var allAssets = __instance.GetAllAssets<Object>();
-                    var stockClips = allAssets.OfType<RuntimeAnimatorController>().SelectMany(x => x.animationClips);
-                    var overrideClips = allAssets.OfType<AnimatorOverrideController>().SelectMany(
-                            controller =>
-                            {
-                                var list = new List<KeyValuePair<AnimationClip, AnimationClip>>(controller.overridesCount);
-                                controller.GetOverrides(list);
-                                return list.Select(x => x.Value);
-                            });
-                    var allClipList = stockClips.Concat(overrideClips).ToList();
-
-                    // Have to make a new override controller because directly changing animationClips array doesn't work
-                    var overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
-
-                    for (var i = 0; i < playerClips.Length; i++)
-                        overrideController[playerClips[i]] = allClipList.First(x => x.name == replacements[i]);
-
-                    animator.runtimeAnimatorController = overrideController;
-
-                    __instance.UnloadBundle();
+                if (playerClips.Length != replacements.Length)
+                {
+                    Logger.Log(LogLevel.Error, "Player runtimeAnimatorController.animationClips has different size than the replacement list!");
+                    return;
                 }
+
+                var allAssets = __instance.GetAllAssets<Object>();
+                var stockClips = allAssets.OfType<RuntimeAnimatorController>().SelectMany(x => x.animationClips);
+                var overrideClips = allAssets.OfType<AnimatorOverrideController>().SelectMany(
+                    controller =>
+                    {
+                        var list = new List<KeyValuePair<AnimationClip, AnimationClip>>(controller.overridesCount);
+                        controller.GetOverrides(list);
+                        return list.Select(x => x.Value);
+                    });
+                var allClipList = stockClips.Concat(overrideClips).ToList();
+
+                // Have to make a new override controller because directly changing animationClips array doesn't work
+                var overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+
+                for (var i = 0; i < playerClips.Length; i++)
+                {
+                    try
+                    {
+                        overrideController[playerClips[i]] = allClipList.First(x => x.name == replacements[i]);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        Logger.Log(LogLevel.Error, $"Failed to find animation {replacements[i]}! Using DefaultIdleAnimation instead.");
+                        overrideController[playerClips[i]] = allClipList.First(x => x.name == BecomeTrapGui.DefaultIdleAnimation);
+                    }
+                }
+
+                animator.runtimeAnimatorController = overrideController;
+
+                __instance.UnloadBundle();
             }
 
             [HarmonyPostfix]
