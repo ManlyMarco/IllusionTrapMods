@@ -12,12 +12,16 @@ namespace KK_BecomeTrap
         public const string GUID = "marco.becometrap";
         internal const string Version = "2.0";
 
+        internal static BecomeTrap Instance;
+
         private void Awake()
         {
             if(StudioAPI.InsideStudio) return;
 
-            CharacterApi.RegisterExtraBehaviour<BecomeTrapController>(GUID);
+            Instance = this;
 
+            CharacterApi.RegisterExtraBehaviour<BecomeTrapController>(GUID);
+            BecomeTrapGui.Initialize();
             HarmonyInstance.Create(GUID).PatchAll(typeof(Hooks));
         }
     }

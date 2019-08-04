@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BepInEx;
 using KKAPI.Maker;
 using KKAPI.Maker.UI;
 using UniRx;
@@ -10,9 +9,7 @@ using UnityEngine;
 
 namespace KK_BecomeTrap
 {
-    [BepInPlugin(BecomeTrap.GUID + "_GUI", "Koikatsu: Become Trap GUI", BecomeTrap.Version)]
-    [BepInDependency(BecomeTrap.GUID)]
-    public class BecomeTrapGui : BaseUnityPlugin
+    public static class BecomeTrapGui
     {
         private static readonly List<KeyValuePair<string, string>> _idleAnimations = new List<KeyValuePair<string, string>>
         {
@@ -24,12 +21,19 @@ namespace KK_BecomeTrap
             new KeyValuePair<string, string>("Stand_13_01", "Ladylike")
         };
 
-        private MakerDropdown _animType;
-        private MakerToggle _toggleEnabled;
+        private static MakerDropdown _animType;
+        private static MakerToggle _toggleEnabled;
 
         internal static string DefaultIdleAnimation => _idleAnimations[0].Key;
 
-        private IEnumerator ChaFileLoadedCo()
+        internal static void Initialize()
+        {
+            MakerAPI.RegisterCustomSubCategories += RegisterCustomSubCategories;
+            MakerAPI.ChaFileLoaded += (sender, args) => BecomeTrap.Instance.StartCoroutine(ChaFileLoadedCo());
+            MakerAPI.MakerExiting += MakerExiting;
+        }
+
+        private static IEnumerator ChaFileLoadedCo()
         {
             yield return null;
 
@@ -46,31 +50,24 @@ namespace KK_BecomeTrap
             return MakerAPI.GetCharacterControl().gameObject.GetComponent<BecomeTrapController>();
         }
 
-        private void MakerExiting(object sender, EventArgs e)
+        private static void MakerExiting(object sender, EventArgs e)
         {
             _toggleEnabled = null;
             _animType = null;
         }
 
-        private void RegisterCustomSubCategories(object sender, RegisterSubCategoriesEvent e)
+        private static void RegisterCustomSubCategories(object sender, RegisterSubCategoriesEvent e)
         {
             if (MakerAPI.GetMakerSex() == 0)
             {
                 var category = MakerConstants.Parameter.Character;
 
-                _toggleEnabled = e.AddControl(new MakerToggle(category, "Character is a trap or a futa (changes gameplay)", this));
+                _toggleEnabled = e.AddControl(new MakerToggle(category, "Character is a trap or a futa (changes gameplay)", BecomeTrap.Instance));
                 _toggleEnabled.ValueChanged.Subscribe(val => GetMakerController().IsTrap = val);
 
-                _animType = e.AddControl(new MakerDropdown("Idle trap animation", _idleAnimations.Select(x => x.Value).ToArray(), category, 0, this));
+                _animType = e.AddControl(new MakerDropdown("Idle trap animation", _idleAnimations.Select(x => x.Value).ToArray(), category, 0, BecomeTrap.Instance));
                 _animType.ValueChanged.Subscribe(i => GetMakerController().IdleAnimation = _idleAnimations[i].Key);
             }
-        }
-
-        private void Start()
-        {
-            MakerAPI.RegisterCustomSubCategories += RegisterCustomSubCategories;
-            MakerAPI.ChaFileLoaded += (sender, args) => StartCoroutine(ChaFileLoadedCo());
-            MakerAPI.MakerExiting += MakerExiting;
         }
     }
 }
