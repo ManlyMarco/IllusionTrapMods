@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_BecomeTrap", "KK_BecomeTrap\KK_BecomeTrap.csproj", "{F47E187C-9A8F-45E7-A778-5057E1D9B3F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI_ReverseTrap", "AI_ReverseTrap\AI_ReverseTrap.csproj", "{24E7EF57-8992-404A-B9A6-FFB9ABFEB4AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F47E187C-9A8F-45E7-A778-5057E1D9B3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47E187C-9A8F-45E7-A778-5057E1D9B3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47E187C-9A8F-45E7-A778-5057E1D9B3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E7EF57-8992-404A-B9A6-FFB9ABFEB4AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E7EF57-8992-404A-B9A6-FFB9ABFEB4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E7EF57-8992-404A-B9A6-FFB9ABFEB4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E7EF57-8992-404A-B9A6-FFB9ABFEB4AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
