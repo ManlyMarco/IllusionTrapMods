@@ -48,13 +48,16 @@
       <HintPath>..\..\..\..\Games\Koikatsu\BepInEx\core\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="BepInEx.Harmony">
+      <HintPath>..\..\..\KKEC\KKAPI\paket-files\IllusionMods\IllusionLibs\lib\BepInEx\BepInEx.Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="ExtensibleSaveFormat">
-      <HintPath>..\..\MakerAPI\lib\ExtensibleSaveFormat.dll</HintPath>
+      <HintPath>..\..\BepisPlugins\bin\BepInEx\plugins\KK_BepisPlugins\ExtensibleSaveFormat.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="KKAPI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Games\Koikatsu\BepInEx\KKAPI.dll</HintPath>
+    <Reference Include="KKAPI">
+      <HintPath>..\..\..\KKEC\KKAPI\bin\KKAPI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">

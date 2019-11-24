@@ -7,10 +7,9 @@ using ActionGame;
 using ActionGame.Chara;
 using ActionGame.Communication;
 using BepInEx.Logging;
-using Harmony;
+using HarmonyLib;
 using Manager;
 using UnityEngine;
-using Logger = BepInEx.Logger;
 using Motion = Illusion.Game.Elements.EasyLoader.Motion;
 using Object = UnityEngine.Object;
 
@@ -139,7 +138,7 @@ namespace KK_BecomeTrap
             {
                 // Make sure we are called from ActionGame.Communication.Info.GetIntroductionADV
                 // Calling only StackTrace would be enough but this is much faster for most calls
-                if (_stage >= 2 || _group != Info.Group.Introduction || _command != 0) return;
+                if (_stage >= 2 || _group != ActionGame.Communication.Info.Group.Introduction || _command != 0) return;
 
                 var player = Game.Instance?.actScene?.Player;
                 if (player == null) return;
