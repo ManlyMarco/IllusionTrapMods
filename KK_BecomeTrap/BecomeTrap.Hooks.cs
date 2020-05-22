@@ -28,7 +28,7 @@ namespace KK_BecomeTrap
             /// If the player is a trap, load alternative animations
             /// </summary>
             [HarmonyPostfix]
-            [HarmonyPatch(typeof(Motion), nameof(Motion.LoadAnimator), new[] { typeof(Animator) })]
+            [HarmonyPatch(typeof(Motion), nameof(Motion.LoadAnimator), typeof(Animator))]
             public static void LoadAnimatorHook(Motion __instance, Animator animator)
             {
                 if (__instance.bundle != "action/animator/00.unity3d" || __instance.asset != "player") return;
@@ -40,7 +40,7 @@ namespace KK_BecomeTrap
 
                 if (ctrl == null || !ctrl.IsTrap) return;
 
-                Logger.Log(LogLevel.Debug, "[BecomeTrap] Replacing player animations");
+                Logger.Log(LogLevel.Debug, "Replacing player animations");
 
                 var playerClips = animator.runtimeAnimatorController.animationClips;
 
@@ -106,7 +106,7 @@ namespace KK_BecomeTrap
             }
 
             [HarmonyPostfix]
-            [HarmonyPatch(typeof(ActionMap), nameof(ActionMap.Change), new[] { typeof(int), typeof(Scene.Data.FadeType) })]
+            [HarmonyPatch(typeof(ActionMap), nameof(ActionMap.Change), typeof(int), typeof(Scene.Data.FadeType))]
             public static void MapChangePostfix(ActionMap __instance)
             {
                 var inMainGame = Singleton<Game>.IsInstance() && Singleton<Game>.Instance.actScene != null;
@@ -133,7 +133,7 @@ namespace KK_BecomeTrap
             /// Remove events that cause the girl to refuse to talk because you're tresspassing
             /// </summary>
             [HarmonyPostfix]
-            [HarmonyPatch(typeof(Info), "GetListCommand", new[] { typeof(int), typeof(Info.Group), typeof(int) })]
+            [HarmonyPatch(typeof(Info), "GetListCommand", typeof(int), typeof(Info.Group), typeof(int))]
             public static void GetListCommandPostfix(Info __instance, ref List<Info.BasicInfo> __result, int _stage, Info.Group _group, int _command)
             {
                 // Make sure we are called from ActionGame.Communication.Info.GetIntroductionADV
