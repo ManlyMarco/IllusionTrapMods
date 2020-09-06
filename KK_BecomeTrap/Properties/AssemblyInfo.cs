@@ -6,9 +6,9 @@ using KK_BecomeTrap;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("KK_BecomeTrap")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Can turn male characters into playable traps")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ManlyMarco")]
+[assembly: AssemblyCompany("https://github.com/ManlyMarco/IllusionTrapMods")]
 [assembly: AssemblyProduct("KK_BecomeTrap")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
