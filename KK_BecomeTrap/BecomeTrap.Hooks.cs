@@ -21,7 +21,8 @@ namespace KK_BecomeTrap
         {
             private static BecomeTrapController GetController(Player player)
             {
-                return player?.chaCtrl?.gameObject.GetComponent<BecomeTrapController>();
+                if (player == null || player.chaCtrl == null) return null;
+                return player.chaCtrl.gameObject.GetComponent<BecomeTrapController>();
             }
 
             /// <summary>
@@ -140,10 +141,9 @@ namespace KK_BecomeTrap
                 // Calling only StackTrace would be enough but this is much faster for most calls
                 if (_stage >= 2 || _group != ActionGame.Communication.Info.Group.Introduction || _command != 0) return;
 
-                var player = Game.Instance?.actScene?.Player;
-                if (player == null) return;
+                if (Game.Instance == null || Game.Instance.actScene == null) return;
 
-                var controller = GetController(player);
+                var controller = GetController(Game.Instance.actScene.Player);
                 // Only applicable if the player is a trap
                 if (controller == null || !controller.IsTrap) return;
 
