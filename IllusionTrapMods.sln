@@ -9,7 +9,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI_ReverseTrap", "AI_Revers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KKS_BecomeTrap", "KKS_BecomeTrap\KKS_BecomeTrap.csproj", "{17A86AC1-76FA-42C6-91D7-F620EAD7597A}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Core_BecomeTrap", "Core_BecomeTrap\Core_BecomeTrap.shproj", "{61D788A9-4435-4D3A-A264-B33F4698BB1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BecomeTrap", "BecomeTrap", "{D397C5EE-29C1-41F2-ABF3-C10D3CE769E0}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Core_BecomeTrap\Core_BecomeTrap.projitems*{17a86ac1-76fa-42c6-91d7-f620ead7597a}*SharedItemsImports = 4
+		Core_BecomeTrap\Core_BecomeTrap.projitems*{61d788a9-4435-4d3a-a264-b33f4698bb1d}*SharedItemsImports = 13
+		Core_BecomeTrap\Core_BecomeTrap.projitems*{f47e187c-9a8f-45e7-a778-5057e1d9b3f0}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -30,6 +39,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F47E187C-9A8F-45E7-A778-5057E1D9B3F0} = {D397C5EE-29C1-41F2-ABF3-C10D3CE769E0}
+		{17A86AC1-76FA-42C6-91D7-F620EAD7597A} = {D397C5EE-29C1-41F2-ABF3-C10D3CE769E0}
+		{61D788A9-4435-4D3A-A264-B33F4698BB1D} = {D397C5EE-29C1-41F2-ABF3-C10D3CE769E0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {81E6F113-F163-4148-8BFE-CBC2170AFA12}
