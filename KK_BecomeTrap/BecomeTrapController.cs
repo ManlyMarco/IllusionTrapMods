@@ -12,7 +12,7 @@ namespace KK_BecomeTrap
 
         protected override void OnCardBeingSaved(GameMode currentGameMode)
         {
-            if (ChaControl.sex == 0 && IsTrap)
+            if (ChaControl.sex == 0 && (IsTrap || !string.IsNullOrEmpty(IdleAnimation)))
             {
                 var data = new PluginData();
                 data.data.Add("IsTrap", IsTrap);
