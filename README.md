@@ -1,7 +1,9 @@
+# IllusionTrapMods
+Mods for some games by Illusion that add features related to traps.
 
-# Koikatsu: Become Trap / KK_BecomeTrap
-Mod that adds a new setting to male character maker - "Character is a trap". Trap characters have following properties in main game:
-- Different animations while in school
+## Koikatsu: Become Trap
+Plugin for KK and KKS that adds a new setting to male character maker - "Character is a trap". Trap characters have following properties in main game:
+- Different animations while walking around in main game
 - Ability to freely enter changing rooms and toilets without the girls complaining or running away, and to talk with them as normal
 
 The animation modifications are based on the upillusion0100-otokonoko mod.
@@ -16,7 +18,7 @@ The animation modifications are based on the upillusion0100-otokonoko mod.
 5. Start a new day in game. Idle and running animations should be changed.
 - It's recommended to get the KK_ClothingUnlocker and  KK_UncensorSelector plugins for optimal trapping.
 
-# AI-Shoujo Reverse Trap
+## AI-Shoujo Reverse Trap
 This is a plugin for AI-Shoujo / AI-Girl / AI-Syoujyo that makes it possible to change animations of a female character to those of a male. This makes it look like some girls are actually guys when walking around.
 
 The animations are changed in main game and in maker, not in studio. Animations are changed per-character, you can configure this in character maker in the Body > Overall tab.
