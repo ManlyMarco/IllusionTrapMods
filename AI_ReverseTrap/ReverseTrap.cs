@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
-using BepInEx.Harmony;
 using BepInEx.Logging;
+using HarmonyLib;
 using KKAPI;
 using KKAPI.Chara;
 using KKAPI.Maker;
@@ -97,7 +97,7 @@ namespace AI_ReverseTrap
 
                 MakerAPI.RegisterCustomSubCategories += MakerAPI_RegisterCustomSubCategories;
 
-                HarmonyWrapper.PatchAll(typeof(Hooks));
+                Harmony.CreateAndPatchAll(typeof(Hooks), GUID);
             }
         }
 
