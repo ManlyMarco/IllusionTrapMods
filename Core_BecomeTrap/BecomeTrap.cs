@@ -11,7 +11,7 @@ namespace KK_BecomeTrap
     public partial class BecomeTrap : BaseUnityPlugin
     {
         public const string GUID = "marco.becometrap";
-        public const string Version = "2.2";
+        public const string Version = "2.2.1";
 
         internal static BecomeTrap Instance;
         internal static new ManualLogSource Logger;
