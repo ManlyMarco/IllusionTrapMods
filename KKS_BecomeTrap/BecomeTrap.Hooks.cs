@@ -142,6 +142,9 @@ namespace KK_BecomeTrap
                 // Calling only StackTrace would be enough but this is much faster for most calls
                 if (_stage >= 2 || _group != ActionGame.Communication.Info.Group.Introduction || _command != 0) return;
 
+                // Prevent crashing when speaking to the guide or other NPCs
+                if (__instance.isNPC) return;
+
                 if (!ActionScene.initialized) return;
 
                 var controller = GetController(ActionScene.instance.Player);
