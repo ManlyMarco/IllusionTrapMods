@@ -13,7 +13,7 @@ The animation modifications are based on the upillusion0100-otokonoko mod.
 ### How to use
 1. Make sure at least [BepInEx v4.1](https://github.com/BepInEx/BepInEx), [BepisPlugins r7](https://github.com/bbepis/BepisPlugins) and [KKAPI v1.0](https://github.com/ManlyMarco/KKAPI) are installed, and your game is updated.
 2. Download the latest release below.
-3. Extract the archive directly into your game's directory (it has 2 folders, mods and BepInEx).
+3. Extract the archive directly into your game's directory (where your BepInEx folder is).
 4. Start male character maker (can directly edit from class roster). You should see a new option right under the character name and blood type fields.
 5. Start a new day in game. Idle and running animations should be changed.
 - It's recommended to get the KK_ClothingUnlocker and  KK_UncensorSelector plugins for optimal trapping.
